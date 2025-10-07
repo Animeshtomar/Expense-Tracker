@@ -24,9 +24,11 @@ const defaultAllowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 ];
-const allowedOrigins = (process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((s) => s.trim().replace(/\/$/, "")).filter(Boolean)
-  : defaultAllowedOrigins);
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+      .map((s) => s.trim().replace(/\/$/, ""))
+      .filter(Boolean)
+  : defaultAllowedOrigins;
 
 // Middleware
 app.use(express.json());
@@ -36,7 +38,11 @@ const corsOptions = {
     const normalizedOrigin = origin.replace(/\/$/, "");
     const isAllowed = allowedOrigins.includes(normalizedOrigin);
     if (process.env.NODE_ENV !== "production") {
-      console.log("CORS check:", { normalizedOrigin, allowedOrigins, isAllowed });
+      console.log("CORS check:", {
+        normalizedOrigin,
+        allowedOrigins,
+        isAllowed,
+      });
     }
     if (isAllowed) {
       return callback(null, true);
@@ -71,5 +77,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(Server is listening on http://localhost:${port});
+  console.log(`Server is listening on http://localhost:${port}`);
 });
